@@ -237,18 +237,13 @@
                 <span id="inspector-code-label">extract_metadata & determine_source</span>
                 <span>Python 3.10+</span>
               </div>
-              <pre id="inspector-code" class="text-cyan-300 leading-relaxed"><code>def determine_source(filename, metadata):
-    fn_lower = filename.lower()
-    codec = metadata.get("codec", "")
-    samplerate = metadata.get("samplerate_hz", 0)
-    
-    if re.search(r"\d{4}-\d{2}-\d{2}_\d{2}-\d{2}-\d{2}", filename):
-        return "[OBS_ScreenCap]", False
-    if codec in ["amr", "amrnb"] or (0 < samplerate <= 11025):
-        return "[Voicemail]", True
-    if codec in ["aac", "m4a"] or "recording" in fn_lower:
-        return "[EarSpy_Ambient]", True
-    return "[Unknown_Source]", False</code></pre>
+              <pre id="inspector-code" class="text-cyan-300 leading-relaxed"><code>def determine_source(filename, metadata, rules=None):
+    if rules is None:
+        rules = load_source_rules()  # Configurable via sources_config.json
+    for rule in rules:
+        if matches_source_rule(filename, metadata, rule):
+            return rule.get("tag"), bool(rule.get("high_sensitivity", False))
+    return None, False  # Clean fallback without Unknown_Source</code></pre>
             </div>
           </div>
         </div>
@@ -798,23 +793,18 @@
         title: "Source Ingestion & Dynamic Routing",
         desc: "The pipeline monitors target directories for arbitrary multi-format media (`.wav`, `.mp3`, `.m4a`, `.aac`, `.amr`, `.3ga`). It immediately executes ffprobe to determine audio channel geometry and bitrates, while parsing regex timestamp patterns to establish canonical chronological file naming.",
         bullets: [
-          "Zero-data loss handling of legacy phone codecs (`amrnb`/`amrwb`) and mobile voice memos.",
-          "Automated tagging: `[Voicemail]`, `[OBS_ScreenCap]`, `[EarSpy_Ambient]`.",
-          "Prevents duplicate processing by checking existing transcript signatures."
+          "Configurable matching via `sources_config.json` (codecs, filename regex, substrings, sample rate).",
+          "Automated dynamic tagging: `[Voicemail]`, `[ScreenCap]`, `[VoiceMemo]` (customizable).",
+          "Clean fallback: Unmatched audio files omit source tags without appending 'Unknown Source'."
         ],
-        codeLabel: "extract_metadata & determine_source",
-        code: `def determine_source(filename, metadata):
-    fn_lower = filename.lower()
-    codec = metadata.get("codec", "")
-    samplerate = metadata.get("samplerate_hz", 0)
-    
-    if re.search(r"\\d{4}-\\d{2}-\\d{2}_\\d{2}-\\d{2}-\\d{2}", filename):
-        return "[OBS_ScreenCap]", False
-    if codec in ["amr", "amrnb"] or (0 < samplerate <= 11025):
-        return "[Voicemail]", True
-    if codec in ["aac", "m4a"] or "recording" in fn_lower:
-        return "[EarSpy_Ambient]", True
-    return "[Unknown_Source]", False`
+        codeLabel: "determine_source & load_source_rules",
+        code: `def determine_source(filename, metadata, rules=None):
+    if rules is None:
+        rules = load_source_rules()  # Configurable via sources_config.json
+    for rule in rules:
+        if matches_source_rule(filename, metadata, rule):
+            return rule.get("tag"), bool(rule.get("high_sensitivity", False))
+    return None, False  # Clean fallback without Unknown_Source`
       },
       2: {
         badge: "Stage 02 Details",

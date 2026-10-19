@@ -1,0 +1,36 @@
+{
+  "description": "Configurable audio recording source classification rules for Transcribe_Ambient.",
+  "sources": [
+    {
+      "name": "Screen Capture",
+      "tag": "[ScreenCap]",
+      "high_sensitivity": false,
+      "match_mode": "any",
+      "conditions": {
+        "filename_pattern": "\\d{4}-\\d{2}-\\d{2}_\\d{2}-\\d{2}-\\d{2}",
+        "filename_contains": ["screencap", "obs", "screen_recording"]
+      }
+    },
+    {
+      "name": "Voicemail / Low-Bandwidth Call",
+      "tag": "[Voicemail]",
+      "high_sensitivity": true,
+      "match_mode": "any",
+      "conditions": {
+        "codecs": ["amr", "amrnb", "amrwb"],
+        "filename_contains": ["voicemail", "vm_"],
+        "max_samplerate_hz": 11025
+      }
+    },
+    {
+      "name": "Ambient Voice Memo",
+      "tag": "[VoiceMemo]",
+      "high_sensitivity": true,
+      "match_mode": "any",
+      "conditions": {
+        "codecs": ["aac", "m4a"],
+        "filename_contains": ["recording", "memo", "ambient", "mic"]
+      }
+    }
+  ]
+}

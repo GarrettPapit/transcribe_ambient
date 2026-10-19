@@ -8,21 +8,28 @@ import time
 import shutil
 from pathlib import Path
 from datetime import datetime
-from dotenv import load_dotenv
-from faster_whisper import WhisperModel
-import ollama
+try:
+    from dotenv import load_dotenv
+    load_dotenv()
+except ImportError:
+    pass
 
-# Load environment variables
-load_dotenv()
+try:
+    from faster_whisper import WhisperModel
+except ImportError:
+    WhisperModel = None
+
 
 # Configuration from Environment Variables with sensible defaults
 OLLAMA_HOST = os.getenv("OLLAMA_HOST", "127.0.0.1:11434")
 WHISPER_MODEL_SIZE = os.getenv("WHISPER_MODEL_SIZE", "small")
 WHISPER_DEVICE = os.getenv("WHISPER_DEVICE", "cpu")
 WHISPER_COMPUTE_TYPE = os.getenv("WHISPER_COMPUTE_TYPE", "int8")
+SOURCES_CONFIG_PATH = os.getenv("SOURCES_CONFIG_PATH", "sources_config.json")
 
 os.environ["OLLAMA_HOST"] = OLLAMA_HOST
 os.environ["HF_HUB_DISABLE_SYMLINKS_WARNING"] = "1"
+
 
 SUPPORTED_EXTENSIONS = {".wav", ".mp3", ".aac", ".amr", ".mp4", ".m4a", ".3ga"}
 
@@ -114,31 +121,158 @@ def extract_metadata(audio_path):
             "error": str(e)
         }
 
-def determine_source(filename, metadata):
-    fn_lower = filename.lower()
-    codec = metadata.get("codec", "")
-    samplerate = metadata.get("samplerate_hz", 0)
-    
-    if re.search(r"\d{4}-\d{2}-\d{2}_\d{2}-\d{2}-\d{2}", filename):
-        return "[OBS_ScreenCap]", False
-    if codec in ["amr", "amrnb", "amrwb"] or (0 < samplerate <= 11025) or "voicemail" in fn_lower:
-        return "[Voicemail]", True
-    if codec in ["aac", "m4a"] or "recording" in fn_lower:
-        return "[EarSpy_Ambient]", True
-    return "[Unknown_Source]", False
+DEFAULT_SOURCE_RULES = [
+    {
+        "name": "Screen Capture",
+        "tag": "[ScreenCap]",
+        "high_sensitivity": False,
+        "match_mode": "any",
+        "conditions": {
+            "filename_pattern": r"\d{4}-\d{2}-\d{2}_\d{2}-\d{2}-\d{2}",
+            "filename_contains": ["screencap", "obs", "screen_recording"],
+        },
+    },
+    {
+        "name": "Voicemail / Low-Bandwidth Call",
+        "tag": "[Voicemail]",
+        "high_sensitivity": True,
+        "match_mode": "any",
+        "conditions": {
+            "codecs": ["amr", "amrnb", "amrwb"],
+            "filename_contains": ["voicemail", "vm_"],
+            "max_samplerate_hz": 11025,
+        },
+    },
+    {
+        "name": "Ambient Voice Memo",
+        "tag": "[VoiceMemo]",
+        "high_sensitivity": True,
+        "match_mode": "any",
+        "conditions": {
+            "codecs": ["aac", "m4a"],
+            "filename_contains": ["recording", "memo", "ambient", "mic"],
+        },
+    },
+]
 
-def rename_file_pair(path_obj, metadata, source_tag):
+def load_source_rules(config_path=None):
+    """Loads source classification rules from a JSON config file or falls back to defaults."""
+    target_path = Path(config_path or SOURCES_CONFIG_PATH)
+    if not target_path.is_absolute():
+        candidate = Path.cwd() / target_path
+        if not candidate.exists():
+            candidate = Path(__file__).resolve().parent.parent / target_path
+        if candidate.exists():
+            target_path = candidate
+
+    if target_path.exists():
+        try:
+            with open(target_path, "r", encoding="utf-8") as f:
+                data = json.load(f)
+                rules = data.get("sources", data if isinstance(data, list) else [])
+                if rules:
+                    return rules
+        except Exception as e:
+            print(f"[WARNING] Failed to parse source rules config ({target_path}): {e}. Using defaults.")
+
+    return DEFAULT_SOURCE_RULES
+
+def matches_source_rule(filename: str, metadata: dict, rule: dict) -> bool:
+    """Evaluates whether an audio file satisfies the conditions of a source rule."""
+    conditions = rule.get("conditions", {})
+    if not conditions:
+        return False
+
+    match_mode = rule.get("match_mode", "any").lower()
+    fn_lower = filename.lower()
+    codec = str(metadata.get("codec", "")).lower()
+    samplerate = int(metadata.get("samplerate_hz", 0) or 0)
+    duration = float(metadata.get("duration_sec", 0) or 0)
+    ext = Path(filename).suffix.lower()
+
+    eval_results = []
+
+    if "filename_pattern" in conditions:
+        pattern = conditions["filename_pattern"]
+        matched = bool(re.search(pattern, filename))
+        eval_results.append(matched)
+
+    if "filename_contains" in conditions:
+        substrings = conditions["filename_contains"]
+        if isinstance(substrings, str):
+            substrings = [substrings]
+        matched = any(sub.lower() in fn_lower for sub in substrings)
+        eval_results.append(matched)
+
+    if "codecs" in conditions:
+        codecs = conditions["codecs"]
+        if isinstance(codecs, str):
+            codecs = [codecs]
+        matched = codec in [c.lower() for c in codecs]
+        eval_results.append(matched)
+
+    if "max_samplerate_hz" in conditions:
+        max_sr = int(conditions["max_samplerate_hz"])
+        matched = (0 < samplerate <= max_sr)
+        eval_results.append(matched)
+
+    if "min_samplerate_hz" in conditions:
+        min_sr = int(conditions["min_samplerate_hz"])
+        matched = (samplerate >= min_sr)
+        eval_results.append(matched)
+
+    if "max_duration_sec" in conditions:
+        max_dur = float(conditions["max_duration_sec"])
+        matched = (0 < duration <= max_dur)
+        eval_results.append(matched)
+
+    if "min_duration_sec" in conditions:
+        min_dur = float(conditions["min_duration_sec"])
+        matched = (duration >= min_dur)
+        eval_results.append(matched)
+
+    if "extensions" in conditions:
+        extensions = conditions["extensions"]
+        if isinstance(extensions, str):
+            extensions = [extensions]
+        matched = ext in [e.lower() if e.startswith(".") else f".{e.lower()}" for e in extensions]
+        eval_results.append(matched)
+
+    if not eval_results:
+        return False
+
+    return all(eval_results) if match_mode == "all" else any(eval_results)
+
+def determine_source(filename: str, metadata: dict, rules: list = None):
+    """Determines the recording source tag and sensitivity flag from configurable rules.
+    Returns (source_tag, high_sensitivity). If no rule matches, returns (None, False)."""
+    if rules is None:
+        rules = load_source_rules()
+
+    for rule in rules:
+        if matches_source_rule(filename, metadata, rule):
+            return rule.get("tag"), bool(rule.get("high_sensitivity", False))
+
+    return None, False
+
+def rename_file_pair(path_obj: Path, metadata: dict, source_tag: str = None):
+    """Generates standardized paths for the audio file and its accompanying transcript.
+    Omits source tagging when source_tag is None or empty (no 'Unknown Source' added)."""
     filename = path_obj.name
     audio_ext = path_obj.suffix
     match = re.search(r"\d{10,13}", filename)
+    tag_suffix = f"_{source_tag}" if source_tag else ""
+
     if match:
         raw_ts = int(match.group())
         ts_seconds = raw_ts / 1000.0 if len(str(raw_ts)) >= 13 else float(raw_ts)
         readable_date = datetime.fromtimestamp(ts_seconds).strftime("%Y-%m-%d_%H%M%S")
-        new_base = f"Recording_{readable_date}_{source_tag}"
+        new_base = f"Recording_{readable_date}{tag_suffix}"
     else:
-        new_base = f"{path_obj.stem}_{source_tag}"
+        new_base = f"{path_obj.stem}{tag_suffix}"
+
     return path_obj.parent / f"{new_base}{audio_ext}", path_obj.parent / f"{new_base}.txt"
+
 
 def preprocess_standard(input_path, output_path):
     filter_chain = "afftdn=nr=12:nf=-30,silenceremove=start_periods=1:start_duration=0.5:start_threshold=-30dB:stop_periods=-1:stop_duration=0.5:stop_threshold=-30dB,loudnorm"
@@ -165,13 +299,13 @@ def polish_with_ollama(raw_transcript, metadata):
         print(f"[WARNING] Ollama polish failed ({e}). Returning raw transcript.")
         return raw_transcript
 
-def process_single_file(path_obj, model, high_sensitivity=False, enable_resolve=False, enable_uvr=False):
+def process_single_file(path_obj, model, high_sensitivity=False, enable_resolve=False, enable_uvr=False, source_rules=None):
     temp_cleaned_wav = path_obj.with_suffix(".temp_cleaned.wav")
     print(f"\n--- Processing File: {path_obj.name} ---")
     
     try:
         metadata = extract_metadata(str(path_obj))
-        source_tag, force_hs = determine_source(path_obj.name, metadata)
+        source_tag, force_hs = determine_source(path_obj.name, metadata, source_rules)
         use_hs = high_sensitivity or force_hs
 
         print("[1/3] Preprocessing audio via FFmpeg...")
@@ -195,7 +329,8 @@ def process_single_file(path_obj, model, high_sensitivity=False, enable_resolve=
         new_audio_path, new_txt_path = rename_file_pair(path_obj, metadata, source_tag)
         with open(new_txt_path, "w", encoding="utf-8") as f:
             f.write(final_text)
-        path_obj.rename(new_audio_path)
+        if new_audio_path != path_obj:
+            path_obj.rename(new_audio_path)
         print(f"SUCCESS: Processed and saved to {new_txt_path.name}")
 
     except Exception as e:
@@ -204,7 +339,7 @@ def process_single_file(path_obj, model, high_sensitivity=False, enable_resolve=
         if temp_cleaned_wav.exists():
             temp_cleaned_wav.unlink()
 
-def process_directory(target_dir, high_sensitivity=False, enable_resolve=False, enable_uvr=False):
+def process_directory(target_dir, high_sensitivity=False, enable_resolve=False, enable_uvr=False, config_path=None):
     dir_path = Path(target_dir).resolve()
     if not dir_path.exists():
         print(f"[FATAL] Directory '{target_dir}' does not exist.")
@@ -215,13 +350,24 @@ def process_directory(target_dir, high_sensitivity=False, enable_resolve=False, 
         print(f"No supported audio files found in: {dir_path}")
         return
 
-    print(f"Loaded {len(audio_files)} files. Initializing Whisper Model ({WHISPER_MODEL_SIZE})...")
+    source_rules = load_source_rules(config_path)
+    configured_tags = [r.get("tag") for r in source_rules if r.get("tag")]
+
+    print(f"Loaded {len(audio_files)} files. Loaded {len(source_rules)} source classification rules.")
+    print(f"Initializing Whisper Model ({WHISPER_MODEL_SIZE})...")
     model = WhisperModel(WHISPER_MODEL_SIZE, device=WHISPER_DEVICE, compute_type=WHISPER_COMPUTE_TYPE)
 
     for audio_file in audio_files:
-        if any(tag in audio_file.name for tag in ["[OBS_ScreenCap]", "[Voicemail]", "[EarSpy_Ambient]", "[Unknown_Source]"]):
+        # Skip if transcript already exists for this file
+        if audio_file.with_suffix(".txt").exists():
+            print(f"Skipping '{audio_file.name}' (Transcript exists)")
             continue
-        process_single_file(audio_file, model, high_sensitivity, enable_resolve, enable_uvr)
+
+        # Skip if already standardized and tagged
+        if configured_tags and any(tag in audio_file.name for tag in configured_tags) and audio_file.name.startswith("Recording_"):
+            continue
+
+        process_single_file(audio_file, model, high_sensitivity, enable_resolve, enable_uvr, source_rules)
 
 if __name__ == "__main__":
     verify_system_dependencies()
@@ -231,6 +377,7 @@ if __name__ == "__main__":
     parser.add_argument("-hs", "--high-sensitivity", action="store_true", help="Force high-sensitivity transcription mode.")
     parser.add_argument("--enable-resolve", action="store_true", help="Enable DaVinci Resolve Neural Voice Isolation fallback.")
     parser.add_argument("--enable-uvr", action="store_true", help="Enable Ultimate Vocal Remover fallback.")
+    parser.add_argument("--sources-config", default=None, help="Path to custom JSON source classification rules.")
     args = parser.parse_args()
 
-    process_directory(args.directory, args.high_sensitivity, args.enable_resolve, args.enable_uvr)
+    process_directory(args.directory, args.high_sensitivity, args.enable_resolve, args.enable_uvr, args.sources_config)

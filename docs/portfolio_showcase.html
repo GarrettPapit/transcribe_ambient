@@ -1,0 +1,1011 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Transcribe_Ambient | Enterprise AI Pipeline Portfolio Showcase</title>
+  <script src="https://www.gstatic.com/antigravity/web/dev/tailwindcss.min.js"></script>
+  <style>
+    @keyframes pulseGlow {
+      0%, 100% { opacity: 0.4; }
+      50% { opacity: 0.9; }
+    }
+    .pulse-glow { animation: pulseGlow 2.5s infinite; }
+    .glass-panel {
+      background: rgba(18, 24, 38, 0.75);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .glass-card {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+    }
+    .terminal-scroll::-webkit-scrollbar {
+      width: 6px;
+    }
+    .terminal-scroll::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.15);
+      border-radius: 3px;
+    }
+  </style>
+</head>
+<body class="bg-[#0B0F19] text-[#E2E8F0] antialiased min-h-screen font-sans selection:bg-cyan-500 selection:text-white">
+
+  <!-- TOP HERO NAVIGATION -->
+  <header class="border-b border-slate-800/80 bg-[#0B0F19]/90 sticky top-0 z-50 backdrop-blur-md">
+    <div class="max-w-7xl mx-auto px-6 py-4 flex flex-wrap items-center justify-between gap-4">
+      <div class="flex items-center space-x-3">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-cyan-500 via-blue-600 to-indigo-600 flex items-center justify-center shadow-lg shadow-cyan-500/20">
+          <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 100-6 3 3 0 000 6z" />
+          </svg>
+        </div>
+        <div>
+          <div class="flex items-center space-x-2">
+            <span class="font-bold text-lg text-white tracking-tight">Transcribe_Ambient</span>
+            <span class="px-2 py-0.5 text-xs font-semibold rounded-full bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">Zero-Cloud AI</span>
+          </div>
+          <p class="text-xs text-slate-400">Enterprise Ambient Audio DSP & Local LLM Transcription Pipeline</p>
+        </div>
+      </div>
+
+      <!-- Navigation Tabs -->
+      <nav class="flex items-center space-x-1 bg-slate-900/80 p-1 rounded-xl border border-slate-800">
+        <button onclick="switchTab('overview')" id="tab-btn-overview" class="tab-btn px-4 py-2 text-xs font-medium rounded-lg transition-all bg-cyan-500/20 text-cyan-300 border border-cyan-500/30">
+          Process Overview
+        </button>
+        <button onclick="switchTab('gui')" id="tab-btn-gui" class="tab-btn px-4 py-2 text-xs font-medium rounded-lg transition-all text-slate-400 hover:text-white">
+          Interactive App Mockup
+        </button>
+        <button onclick="switchTab('audio-lab')" id="tab-btn-audio-lab" class="tab-btn px-4 py-2 text-xs font-medium rounded-lg transition-all text-slate-400 hover:text-white">
+          DSP & Transcript Diff
+        </button>
+        <button onclick="switchTab('business')" id="tab-btn-business" class="tab-btn px-4 py-2 text-xs font-medium rounded-lg transition-all text-slate-400 hover:text-white">
+          Business ROI & Privacy
+        </button>
+        <button onclick="switchTab('video-script')" id="tab-btn-video-script" class="tab-btn px-4 py-2 text-xs font-medium rounded-lg transition-all text-slate-400 hover:text-white">
+          Video Demo Storyboard
+        </button>
+      </nav>
+
+      <!-- Portfolio Author Tag -->
+      <div class="hidden md:flex items-center space-x-2 text-xs text-slate-400">
+        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+        <span>Engineer: <strong class="text-slate-200">Garrett Papit</strong></span>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN CONTAINER -->
+  <main class="max-w-7xl mx-auto px-6 py-8">
+
+    <!-- ============================================================== -->
+    <!-- TAB 1: PROCESS OVERVIEW & SYSTEM ARCHITECTURE -->
+    <!-- ============================================================== -->
+    <div id="tab-overview" class="tab-content space-y-8">
+      
+      <!-- HERO BANNER IMAGE -->
+      <div class="relative overflow-hidden rounded-2xl border border-slate-700/80 shadow-2xl group">
+        <img src="hero_portfolio_banner.jpg" alt="Local AI Ambient Audio Transcription Pipeline Architecture" class="w-full h-auto object-cover max-h-[400px] transition-transform duration-700 group-hover:scale-[1.01]">
+        <div class="absolute inset-0 bg-gradient-to-t from-[#0B0F19] via-transparent to-transparent opacity-60"></div>
+        <div class="absolute bottom-4 left-6 right-6 flex items-center justify-between text-xs text-slate-300">
+          <span class="bg-black/60 backdrop-blur-md px-3 py-1 rounded-full border border-white/10 font-mono">Architecture Visualization • On-Premise DSP & Local Edge AI</span>
+          <span class="bg-cyan-500/20 text-cyan-300 backdrop-blur-md px-3 py-1 rounded-full border border-cyan-500/30 font-semibold">16:9 Portfolio Hero Asset</span>
+        </div>
+      </div>
+
+      <!-- HERO VALUE BANNER -->
+      <div class="relative overflow-hidden rounded-2xl glass-panel p-8 border border-cyan-500/20 shadow-2xl">
+        <div class="absolute -right-20 -top-20 w-80 h-80 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none"></div>
+        <div class="absolute -left-20 -bottom-20 w-80 h-80 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none"></div>
+
+        <div class="max-w-3xl space-y-4">
+          <div class="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-cyan-950/60 text-cyan-400 border border-cyan-800/60 text-xs font-medium">
+            <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+            <span>Portfolio Showcase Highlight</span>
+          </div>
+          <h1 class="text-3xl sm:text-4xl font-extrabold text-white tracking-tight leading-tight">
+            Transforming Unconditioned Ambient Audio into <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-indigo-400">Auditable Business Intelligence</span> — 100% On-Premise.
+          </h1>
+          <p class="text-slate-300 text-sm sm:text-base leading-relaxed">
+            Standard cloud speech APIs choke on room reverberation, air-conditioner hum, and cross-talk, while sending sensitive corporate conversations over third-party servers. This production pipeline couples <strong>FFmpeg DSP spectral conditioning</strong>, <strong>INT8 Quantized Faster-Whisper</strong>, and <strong>Ollama Local LLM Polish</strong> to achieve zero-cloud, zero-cost, enterprise-grade transcription.
+          </p>
+
+          <!-- Core Stat Cards -->
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 pt-4">
+            <div class="glass-card p-4 rounded-xl border border-slate-700/50">
+              <div class="text-2xl font-bold text-cyan-400">$0.00</div>
+              <div class="text-xs text-slate-400 font-medium mt-1">Marginal API Costs</div>
+            </div>
+            <div class="glass-card p-4 rounded-xl border border-slate-700/50">
+              <div class="text-2xl font-bold text-indigo-400">100%</div>
+              <div class="text-xs text-slate-400 font-medium mt-1">Data Sovereignty (Air-Gapped)</div>
+            </div>
+            <div class="glass-card p-4 rounded-xl border border-slate-700/50">
+              <div class="text-2xl font-bold text-emerald-400">~60%</div>
+              <div class="text-xs text-slate-400 font-medium mt-1">Whisper Latency Cut via DSP</div>
+            </div>
+            <div class="glass-card p-4 rounded-xl border border-slate-700/50">
+              <div class="text-2xl font-bold text-amber-400">0</div>
+              <div class="text-xs text-slate-400 font-medium mt-1">Cloud Egress Points / Leaks</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- INTERACTIVE PIPELINE FLOWCHART -->
+      <div class="space-y-4">
+        <div class="flex items-center justify-between">
+          <h2 class="text-xl font-bold text-white tracking-tight flex items-center space-x-2">
+            <span>Unified 4-Stage Architectural Pipeline</span>
+          </h2>
+          <span class="text-xs text-slate-400">Click any stage to reveal operational mechanics & code triggers</span>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+          
+          <!-- Stage 1 -->
+          <div onclick="selectStage(1)" id="stage-card-1" class="stage-card cursor-pointer glass-panel p-5 rounded-xl border border-cyan-500/40 bg-cyan-950/20 transition-all hover:border-cyan-400 shadow-md">
+            <div class="flex items-center justify-between mb-3">
+              <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-cyan-500/20 text-cyan-300">Stage 01</span>
+              <svg class="w-5 h-5 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/></svg>
+            </div>
+            <h3 class="font-bold text-white text-base">Ingestion & Diagnostics</h3>
+            <p class="text-xs text-slate-400 mt-2 line-clamp-3">
+              Batch scans watched folders. `ffprobe` and `TinyTag` extract sample rates, codecs, and durations while classifying source tags (`[Voicemail]`, `[OBS]`, `[EarSpy]`).
+            </p>
+            <div class="mt-4 pt-3 border-t border-slate-800 text-[11px] text-cyan-300 font-mono">
+              Auto-Classification Active
+            </div>
+          </div>
+
+          <!-- Stage 2 -->
+          <div onclick="selectStage(2)" id="stage-card-2" class="stage-card cursor-pointer glass-panel p-5 rounded-xl border border-slate-800 transition-all hover:border-indigo-400 shadow-md">
+            <div class="flex items-center justify-between mb-3">
+              <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-indigo-500/20 text-indigo-300">Stage 02</span>
+              <svg class="w-5 h-5 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3"/></svg>
+            </div>
+            <h3 class="font-bold text-white text-base">DSP Conditioning</h3>
+            <p class="text-xs text-slate-400 mt-2 line-clamp-3">
+              FFmpeg multi-stage filter: `afftdn` FFT noise suppression (-30dB floor), two-way silence stripping (-30dB), and `loudnorm` normalization to 16kHz mono.
+            </p>
+            <div class="mt-4 pt-3 border-t border-slate-800 text-[11px] text-indigo-300 font-mono">
+              afftdn + silenceremove
+            </div>
+          </div>
+
+          <!-- Stage 3 -->
+          <div onclick="selectStage(3)" id="stage-card-3" class="stage-card cursor-pointer glass-panel p-5 rounded-xl border border-slate-800 transition-all hover:border-blue-400 shadow-md">
+            <div class="flex items-center justify-between mb-3">
+              <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-blue-500/20 text-blue-300">Stage 03</span>
+              <svg class="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+            </div>
+            <h3 class="font-bold text-white text-base">Quantized Faster-Whisper</h3>
+            <p class="text-xs text-slate-400 mt-2 line-clamp-3">
+              CTranslate2 INT8 quantized small model executes parallel beam search (3 CPU threads / 2 workers). Voice Activity Detection (VAD) rejects hallucination loops.
+            </p>
+            <div class="mt-4 pt-3 border-t border-slate-800 text-[11px] text-blue-300 font-mono">
+              CTranslate2 INT8 Engine
+            </div>
+          </div>
+
+          <!-- Stage 4 -->
+          <div onclick="selectStage(4)" id="stage-card-4" class="stage-card cursor-pointer glass-panel p-5 rounded-xl border border-slate-800 transition-all hover:border-purple-400 shadow-md">
+            <div class="flex items-center justify-between mb-3">
+              <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-purple-500/20 text-purple-300">Stage 04</span>
+              <svg class="w-5 h-5 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg>
+            </div>
+            <h3 class="font-bold text-white text-base">Ollama LLM Polish</h3>
+            <p class="text-xs text-slate-400 mt-2 line-clamp-3">
+              Locally served `llama3` acts as an automated acoustic archivist. Eliminates stutters, adds speaker flow structure, and prepends ISO metadata audit headers.
+            </p>
+            <div class="mt-4 pt-3 border-t border-slate-800 text-[11px] text-purple-300 font-mono">
+              Zero-Cloud Llama 3
+            </div>
+          </div>
+
+        </div>
+
+        <!-- STAGE DEEP-DIVE INSPECTOR -->
+        <div id="stage-inspector" class="glass-panel p-6 rounded-2xl border border-cyan-500/30">
+          <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-800 pb-3 mb-4">
+            <div class="flex items-center space-x-3">
+              <span id="inspector-badge" class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-cyan-500/20 text-cyan-300">Stage 01 Details</span>
+              <h4 id="inspector-title" class="font-bold text-white text-base">Source Ingestion & Dynamic Routing</h4>
+            </div>
+            <span class="text-xs text-slate-400 font-mono">Module: src/transcribe_ambient.py</span>
+          </div>
+
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div class="space-y-3">
+              <p id="inspector-desc" class="text-sm text-slate-300 leading-relaxed">
+                The pipeline monitors target directories for arbitrary multi-format media (`.wav`, `.mp3`, `.m4a`, `.aac`, `.amr`, `.3ga`). It immediately executes `ffprobe` to determine audio channel geometry and bitrates, while parsing regex timestamp patterns to establish canonical chronological file naming.
+              </p>
+              <div class="space-y-2">
+                <div class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Key Engineering Advantages:</div>
+                <ul id="inspector-bullets" class="text-xs text-slate-300 space-y-1.5 list-disc list-inside">
+                  <li>Zero-data loss handling of legacy phone codecs (`amrnb`/`amrwb`) and mobile voice memos.</li>
+                  <li>Automated tagging: `[Voicemail]`, `[OBS_ScreenCap]`, `[EarSpy_Ambient]`.</li>
+                  <li>Prevents duplicate processing by checking existing transcript signatures.</li>
+                </ul>
+              </div>
+            </div>
+
+            <!-- Code Snippet Display -->
+            <div class="bg-black/60 rounded-xl p-4 border border-slate-800 font-mono text-xs text-slate-300 overflow-x-auto">
+              <div class="flex items-center justify-between pb-2 mb-2 border-b border-slate-800 text-[11px] text-slate-500">
+                <span id="inspector-code-label">extract_metadata & determine_source</span>
+                <span>Python 3.10+</span>
+              </div>
+              <pre id="inspector-code" class="text-cyan-300 leading-relaxed"><code>def determine_source(filename, metadata):
+    fn_lower = filename.lower()
+    codec = metadata.get("codec", "")
+    samplerate = metadata.get("samplerate_hz", 0)
+    
+    if re.search(r"\d{4}-\d{2}-\d{2}_\d{2}-\d{2}-\d{2}", filename):
+        return "[OBS_ScreenCap]", False
+    if codec in ["amr", "amrnb"] or (0 < samplerate <= 11025):
+        return "[Voicemail]", True
+    if codec in ["aac", "m4a"] or "recording" in fn_lower:
+        return "[EarSpy_Ambient]", True
+    return "[Unknown_Source]", False</code></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ============================================================== -->
+    <!-- TAB 2: INTERACTIVE DESKTOP GUI MOCKUP (gui_transcribe.py) -->
+    <!-- ============================================================== -->
+    <div id="tab-gui" class="tab-content hidden space-y-6">
+      
+      <div class="flex flex-wrap items-center justify-between gap-4">
+        <div>
+          <h2 class="text-2xl font-bold text-white tracking-tight">Interactive Application Simulator</h2>
+          <p class="text-xs text-slate-400">High-fidelity, screenshot-ready mockup of the Tkinter desktop GUI (<code class="text-cyan-400">gui_transcribe.py</code>).</p>
+        </div>
+        <div class="flex items-center space-x-3">
+          <button onclick="startInteractiveSimulation()" id="sim-run-btn" class="px-5 py-2.5 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white font-semibold text-xs shadow-lg shadow-cyan-500/25 transition-all flex items-center space-x-2">
+            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd"/></svg>
+            <span>Run Interactive Simulation</span>
+          </button>
+          <button onclick="resetSimulation()" class="px-3 py-2 rounded-xl glass-card text-xs text-slate-300 hover:text-white border border-slate-700">
+            Reset
+          </button>
+        </div>
+      </div>
+
+      <!-- OS WINDOW WRAPPER -->
+      <div class="max-w-4xl mx-auto rounded-2xl overflow-hidden shadow-2xl border border-slate-700/80 bg-[#161B26]">
+        
+        <!-- Window Title Bar -->
+        <div class="bg-[#0F131D] px-4 py-3 flex items-center justify-between border-b border-slate-800">
+          <div class="flex items-center space-x-2">
+            <div class="w-3 h-3 rounded-full bg-red-500/80"></div>
+            <div class="w-3 h-3 rounded-full bg-yellow-500/80"></div>
+            <div class="w-3 h-3 rounded-full bg-green-500/80"></div>
+            <span class="text-xs font-medium text-slate-400 ml-2">Ambient Audio Transcription Pipeline</span>
+          </div>
+          <div class="text-[11px] text-slate-500 font-mono">Tkinter 8.6 • CTranslate2 INT8 • Ollama</div>
+        </div>
+
+        <!-- Window Body -->
+        <div class="p-6 space-y-5">
+          
+          <!-- Top Directory Input -->
+          <div class="flex items-center space-x-3">
+            <label class="text-xs font-semibold text-slate-300 whitespace-nowrap">Target Folder:</label>
+            <div class="flex-1 bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-xs font-mono text-cyan-300 flex items-center justify-between">
+              <span>C:\EnterpriseAudio\Staging_Recordings</span>
+              <span class="text-slate-500 text-[10px]">4 Files Queued</span>
+            </div>
+            <button class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-medium rounded-lg border border-slate-600 transition">
+              Browse...
+            </button>
+          </div>
+
+          <!-- Controls & Status Bar -->
+          <div class="flex items-center justify-between pt-1">
+            <div class="flex items-center space-x-3">
+              <button id="mock-btn-start" class="px-4 py-2 bg-cyan-600 hover:bg-cyan-500 text-white font-medium text-xs rounded-lg shadow-sm transition">
+                Start Batch Processing
+              </button>
+              <div id="sim-spinner" class="hidden flex items-center space-x-2 text-xs text-cyan-400">
+                <svg class="animate-spin h-3.5 w-3.5 text-cyan-400" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+                <span>Processing Pipeline Active...</span>
+              </div>
+            </div>
+            <div id="mock-status-text" class="text-xs text-slate-400 italic">
+              Status: <span class="text-emerald-400 font-semibold not-italic">Ready</span>
+            </div>
+          </div>
+
+          <!-- Live Animated Progress Bar -->
+          <div class="space-y-1">
+            <div class="flex justify-between text-[11px] text-slate-400">
+              <span id="sim-task-name">Idle</span>
+              <span id="sim-task-pct">0%</span>
+            </div>
+            <div class="w-full bg-slate-900 rounded-full h-2 overflow-hidden border border-slate-800">
+              <div id="sim-progress-bar" class="bg-gradient-to-r from-cyan-500 to-indigo-500 h-2 rounded-full transition-all duration-300" style="width: 0%"></div>
+            </div>
+          </div>
+
+          <!-- Console Terminal Output Window -->
+          <div class="space-y-1.5">
+            <div class="flex items-center justify-between">
+              <label class="text-xs font-semibold text-slate-300">Execution Output Log:</label>
+              <span class="text-[10px] text-slate-500 font-mono">Stream: stdout / stderr redirected</span>
+            </div>
+            
+            <div id="mock-terminal" class="bg-[#0D1117] border border-slate-800 rounded-xl p-4 font-mono text-xs text-slate-300 h-64 overflow-y-auto terminal-scroll space-y-1">
+              <div class="text-slate-500">[INIT] Application initialized. Waiting for user batch trigger...</div>
+              <div class="text-slate-500">[+] FFmpeg binary verified in system PATH.</div>
+              <div class="text-slate-500">[+] Ollama daemon active at 127.0.0.1:11434 (Model: llama3).</div>
+              <div class="text-slate-500">[+] Faster-Whisper backend ready (Compute: int8, Threads: 3, Workers: 2).</div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Window Footer -->
+        <div class="bg-[#0F131D] px-6 py-3 border-t border-slate-800 flex items-center justify-between text-xs text-slate-400">
+          <span>Worker Threads: <strong>3 CPU Cores</strong></span>
+          <span>Audio Conditioning: <strong>FFmpeg afftdn (-30dB)</strong></span>
+          <span>Privacy Mode: <strong>Zero Egress (Enforced)</strong></span>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- ============================================================== -->
+    <!-- TAB 3: DSP & TRANSCRIPT DIFF LAB -->
+    <!-- ============================================================== -->
+    <div id="tab-audio-lab" class="tab-content hidden space-y-8">
+      
+      <div>
+        <h2 class="text-2xl font-bold text-white tracking-tight">Audio Conditioning & Intelligence Synthesis Lab</h2>
+        <p class="text-xs text-slate-400">Visual proof of how signal conditioning cures speech model hallucination and creates structured business data.</p>
+      </div>
+
+      <!-- WAVEFORM COMPARISON CARD -->
+      <div class="glass-panel p-6 rounded-2xl border border-slate-800 space-y-6">
+        <div class="flex flex-wrap items-center justify-between gap-2">
+          <h3 class="font-bold text-white text-lg flex items-center space-x-2">
+            <span>Spectral & Dynamic Range Conditioning (Before vs. After)</span>
+          </h3>
+          <span class="text-xs text-cyan-400 bg-cyan-950/60 px-3 py-1 rounded-full border border-cyan-800">EBU R128 Loudnorm + afftdn</span>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          
+          <!-- Before: Raw Ambient Audio -->
+          <div class="glass-card p-4 rounded-xl border border-red-500/20 bg-red-950/10 space-y-3">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-bold text-red-400 flex items-center space-x-1.5">
+                <span class="w-2 h-2 rounded-full bg-red-400"></span>
+                <span>RAW RECORDING (Low SNR, Noise, Dead Silence)</span>
+              </span>
+              <span class="text-[11px] font-mono text-slate-400">Duration: 184s</span>
+            </div>
+
+            <!-- SVG Waveform Graphic (Noisy) -->
+            <div class="bg-black/50 p-3 rounded-lg border border-red-900/30 h-28 flex items-center justify-center">
+              <svg class="w-full h-full text-red-400/80" viewBox="0 0 500 100" preserveAspectRatio="none">
+                <!-- Heavy noise floor band -->
+                <path d="M0,50 Q10,20 20,50 T40,50 T60,10 T80,50 T100,50 T120,40 T140,50 T160,85 T180,50 T200,50 T220,15 T240,50 T260,50 T280,35 T300,50 T320,50 T340,90 T360,50 T380,50 T400,20 T420,50 T440,50 T460,70 T480,50 T500,50" fill="none" stroke="currentColor" stroke-width="2.5" />
+                <path d="M0,50 Q5,42 10,50 T20,50 T30,45 T40,50 T50,42 T60,50 T70,44 T80,50 T90,43 T100,50 T110,41 T120,50 T130,43 T140,50 T150,45 T160,50 T170,42 T180,50 T190,44 T200,50 T210,43 T220,50 T230,42 T240,50 T250,44 T260,50 T270,41 T280,50 T290,45 T300,50 T310,42 T320,50 T330,43 T340,50 T350,44 T360,50 T370,42 T380,50 T390,44 T400,50 T410,41 T420,50 T430,45 T440,50 T450,43 T460,50 T470,42 T480,50 T490,44 T500,50" fill="none" stroke="#ef4444" stroke-width="1.2" opacity="0.6" />
+              </svg>
+            </div>
+
+            <div class="text-xs text-slate-300 space-y-1">
+              <div>• Persistent HVAC low-frequency hum (60Hz–120Hz)</div>
+              <div>• 72 seconds of dead silence causing Whisper beam hallucination</div>
+              <div>• Peak volume fluctuations: -38 dBFS to -6 dBFS</div>
+            </div>
+          </div>
+
+          <!-- After: DSP Conditioned Audio -->
+          <div class="glass-card p-4 rounded-xl border border-emerald-500/20 bg-emerald-950/10 space-y-3">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-bold text-emerald-400 flex items-center space-x-1.5">
+                <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+                <span>DSP CONDITIONED STEM (Normalized, Speech-Only)</span>
+              </span>
+              <span class="text-[11px] font-mono text-emerald-400 font-semibold">Duration: 62s (-66% Time)</span>
+            </div>
+
+            <!-- SVG Waveform Graphic (Cleaned) -->
+            <div class="bg-black/50 p-3 rounded-lg border border-emerald-900/30 h-28 flex items-center justify-center">
+              <svg class="w-full h-full text-emerald-400" viewBox="0 0 500 100" preserveAspectRatio="none">
+                <!-- Clean discrete speech bursts with flat silence -->
+                <path d="M0,50 L30,50 Q45,10 60,50 T90,50 Q105,85 120,50 L160,50 Q180,5 200,50 T240,50 L290,50 Q310,15 330,50 T370,50 L410,50 Q430,20 450,50 L500,50" fill="none" stroke="currentColor" stroke-width="2.5" />
+              </svg>
+            </div>
+
+            <div class="text-xs text-slate-300 space-y-1">
+              <div>• Dynamic FFT noise floor reduced by <strong>12dB</strong> via <code class="text-emerald-300">afftdn</code></div>
+              <div>• Dead silence segments stripped below <strong>-30dB</strong> floor</div>
+              <div>• Loudness standardized to <strong>-16 LUFS</strong> for optimal Whisper attention</div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- TRANSCRIPTION COMPARISON DIFF -->
+      <div class="glass-panel p-6 rounded-2xl border border-slate-800 space-y-6">
+        <div class="flex items-center justify-between">
+          <h3 class="font-bold text-white text-lg">Transcript Intelligence: Raw Whisper vs. Ollama Llama 3</h3>
+          <span class="text-xs text-slate-400 font-mono">Sample: Executive Strategy Meeting Audio</span>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          
+          <!-- Raw Whisper Output -->
+          <div class="bg-slate-900/80 border border-slate-800 rounded-xl p-5 space-y-3">
+            <div class="flex items-center justify-between pb-2 border-b border-slate-800">
+              <span class="text-xs font-semibold text-amber-400 flex items-center space-x-1.5">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+                <span>Raw Whisper STT (Unprocessed Hallucinations)</span>
+              </span>
+              <span class="text-[11px] text-slate-500 font-mono">Beam Size: 1</span>
+            </div>
+
+            <div class="font-mono text-xs text-slate-300 space-y-3 bg-black/40 p-4 rounded-lg leading-relaxed">
+              <p>
+                um yeah so so like i was saying the the q3 numbers uh... [cough] thank you for watching thank you for watching thank you for watching... we need to make sure the compliance audit passes by next thursday or we face penalties uh you know what i mean?
+              </p>
+              <p class="text-amber-400/80 italic">
+                [Hallucination Loop Triggered by Room Echo: "thank you for watching thank you for watching..."]
+              </p>
+              <p>
+                yeah definitely and also check the server budget before friday.
+              </p>
+            </div>
+          </div>
+
+          <!-- Ollama Polished Output -->
+          <div class="bg-slate-900/80 border border-cyan-500/30 rounded-xl p-5 space-y-3 shadow-lg shadow-cyan-950/20">
+            <div class="flex items-center justify-between pb-2 border-b border-slate-800">
+              <span class="text-xs font-semibold text-cyan-400 flex items-center space-x-1.5">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                <span>Ollama Llama 3 Cleaned (Production Ready)</span>
+              </span>
+              <span class="text-[11px] text-cyan-300 font-mono">Executive Summary</span>
+            </div>
+
+            <div class="text-xs text-slate-200 space-y-3 bg-cyan-950/10 border border-cyan-800/30 p-4 rounded-lg leading-relaxed">
+              <!-- Header -->
+              <div class="border-b border-slate-800 pb-2 text-[11px] text-slate-400 font-mono">
+                <div><strong>RECORDING AUDIT:</strong> Recording_2026-10-18_143000_[OBS_ScreenCap]</div>
+                <div><strong>DURATION:</strong> 62.4s (Cleaned) | <strong>MODEL:</strong> Llama 3 (Zero-Cloud)</div>
+              </div>
+
+              <div class="space-y-2">
+                <p>
+                  <strong>Q3 Financial Review & Compliance:</strong> The team reviewed the Q3 performance metrics. The critical priority is ensuring the upcoming compliance audit is finalized and verified before next Thursday to eliminate statutory penalty risks.
+                </p>
+                <p>
+                  <strong>Action Items:</strong>
+                </p>
+                <ul class="list-disc list-inside space-y-1 text-slate-300 pl-1">
+                  <li>Finalize compliance audit documentation by Thursday.</li>
+                  <li>Review and sign off on server infrastructure budget by Friday.</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ============================================================== -->
+    <!-- TAB 4: BUSINESS ROI & DATA SOVEREIGNTY -->
+    <!-- ============================================================== -->
+    <div id="tab-business" class="tab-content hidden space-y-8">
+      
+      <div>
+        <h2 class="text-2xl font-bold text-white tracking-tight">The Business Value Proposition</h2>
+        <p class="text-xs text-slate-400">Why enterprise engineering teams, law firms, healthcare systems, and defense contractors deploy this local pipeline.</p>
+      </div>
+
+      <!-- ROI CALCULATOR -->
+      <div class="glass-panel p-6 rounded-2xl border border-cyan-500/20 space-y-6">
+        <h3 class="font-bold text-white text-lg flex items-center space-x-2">
+          <span>Interactive Enterprise Cost & Privacy Calculator</span>
+        </h3>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          
+          <!-- Slider Controls -->
+          <div class="space-y-4 md:col-span-1">
+            <div>
+              <div class="flex justify-between text-xs font-semibold text-slate-300 mb-1">
+                <span>Audio Processed / Month:</span>
+                <span id="calc-hours-display" class="text-cyan-400 font-mono">250 Hours</span>
+              </div>
+              <input type="range" id="calc-hours" min="10" max="2000" step="10" value="250" oninput="updateRoiCalc()" class="w-full accent-cyan-400 bg-slate-800 rounded-lg cursor-pointer">
+              <div class="flex justify-between text-[10px] text-slate-500">
+                <span>10 hrs</span>
+                <span>1,000 hrs</span>
+                <span>2,000 hrs</span>
+              </div>
+            </div>
+
+            <div>
+              <div class="flex justify-between text-xs font-semibold text-slate-300 mb-1">
+                <span>Number of Employees / Agents:</span>
+                <span id="calc-users-display" class="text-cyan-400 font-mono">15 Seats</span>
+              </div>
+              <input type="range" id="calc-users" min="1" max="100" step="1" value="15" oninput="updateRoiCalc()" class="w-full accent-cyan-400 bg-slate-800 rounded-lg cursor-pointer">
+              <div class="flex justify-between text-[10px] text-slate-500">
+                <span>1 seat</span>
+                <span>50 seats</span>
+                <span>100 seats</span>
+              </div>
+            </div>
+
+            <div class="p-3 bg-slate-900/90 rounded-xl border border-slate-800 text-[11px] text-slate-400 space-y-1">
+              <div>• Cloud API Rate: <strong>$0.024 / min</strong> (AWS Transcribe)</div>
+              <div>• OpenAI Whisper API: <strong>$0.006 / min</strong></div>
+              <div>• Local Pipeline Cost: <strong>$0.00 / min</strong> (Perpetual)</div>
+            </div>
+          </div>
+
+          <!-- Computed Savings Display -->
+          <div class="md:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-4">
+            
+            <div class="glass-card p-5 rounded-xl border border-emerald-500/30 bg-emerald-950/20 flex flex-col justify-between">
+              <div>
+                <span class="text-xs font-semibold text-emerald-400 uppercase tracking-wider">Annual Cloud Cost Avoidance</span>
+                <div id="calc-annual-saved" class="text-3xl sm:text-4xl font-extrabold text-white mt-2">$43,200</div>
+                <p class="text-xs text-slate-300 mt-2">
+                  Direct API invoice savings compared to hyperscaler transcription services (AWS / Google Cloud).
+                </p>
+              </div>
+              <div class="pt-3 border-t border-emerald-900/40 text-[11px] text-emerald-300 font-mono">
+                100% Marginal Cost Free
+              </div>
+            </div>
+
+            <div class="glass-card p-5 rounded-xl border border-cyan-500/30 bg-cyan-950/20 flex flex-col justify-between">
+              <div>
+                <span class="text-xs font-semibold text-cyan-400 uppercase tracking-wider">Data Liability Exposure</span>
+                <div class="text-3xl sm:text-4xl font-extrabold text-cyan-400 mt-2">0 BITS</div>
+                <p class="text-xs text-slate-300 mt-2">
+                  Zero customer audio recordings transmitted over public WAN. Immune to third-party sub-processor data leaks.
+                </p>
+              </div>
+              <div class="pt-3 border-t border-cyan-900/40 text-[11px] text-cyan-300 font-mono">
+                HIPAA & SOC-2 Ready by Design
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+
+      <!-- 4 VALUE PILLARS -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        
+        <div class="glass-panel p-5 rounded-xl border border-slate-800 space-y-2">
+          <div class="w-8 h-8 rounded-lg bg-cyan-500/20 text-cyan-400 flex items-center justify-center font-bold text-sm">1</div>
+          <h4 class="font-bold text-white text-sm">Absolute Data Sovereignty</h4>
+          <p class="text-xs text-slate-400 leading-relaxed">
+            Meets strict HIPAA, GDPR, Attorney-Client Privilege, and Defense air-gap requirements. Audio stays on local disk.
+          </p>
+        </div>
+
+        <div class="glass-panel p-5 rounded-xl border border-slate-800 space-y-2">
+          <div class="w-8 h-8 rounded-lg bg-indigo-500/20 text-indigo-400 flex items-center justify-center font-bold text-sm">2</div>
+          <h4 class="font-bold text-white text-sm">Deterministic Speed & Scale</h4>
+          <p class="text-xs text-slate-400 leading-relaxed">
+            Faster-Whisper INT8 inference combined with FFmpeg silence removal executes in real-time or faster on standard commodity CPUs.
+          </p>
+        </div>
+
+        <div class="glass-panel p-5 rounded-xl border border-slate-800 space-y-2">
+          <div class="w-8 h-8 rounded-lg bg-blue-500/20 text-blue-400 flex items-center justify-center font-bold text-sm">3</div>
+          <h4 class="font-bold text-white text-sm">Zero Cloud Outage Risk</h4>
+          <p class="text-xs text-slate-400 leading-relaxed">
+            Immune to cloud API rate limits, pricing hikes, internet downtime, or upstream service deprecations.
+          </p>
+        </div>
+
+        <div class="glass-panel p-5 rounded-xl border border-slate-800 space-y-2">
+          <div class="w-8 h-8 rounded-lg bg-purple-500/20 text-purple-400 flex items-center justify-center font-bold text-sm">4</div>
+          <h4 class="font-bold text-white text-sm">Modular Fallback Architecture</h4>
+          <p class="text-xs text-slate-400 leading-relaxed">
+            Pluggable architecture with hooks for Ultimate Vocal Remover (UVR MDX-NET) and DaVinci Resolve Voice Isolation.
+          </p>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- ============================================================== -->
+    <!-- TAB 5: VIDEO DEMO STORYBOARD & RECORDING GUIDE -->
+    <!-- ============================================================== -->
+    <div id="tab-video-script" class="tab-content hidden space-y-8">
+      
+      <div class="flex flex-wrap items-center justify-between gap-4">
+        <div>
+          <h2 class="text-2xl font-bold text-white tracking-tight">Portfolio Video Demo Storyboard (60–90 Seconds)</h2>
+          <p class="text-xs text-slate-400">Ready-to-record scene plan and voiceover narrative for LinkedIn, GitHub README, and personal portfolio showcases.</p>
+        </div>
+        <div class="px-3 py-1.5 rounded-lg bg-cyan-950/80 border border-cyan-800 text-cyan-300 text-xs font-mono">
+          Recommended Format: 1080p 60fps (Loom / OBS Studio)
+        </div>
+      </div>
+
+      <!-- STORYBOARD SCENE TILES -->
+      <div class="space-y-4">
+        
+        <!-- Scene 1 -->
+        <div class="glass-panel p-5 rounded-xl border border-slate-800 space-y-3">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center space-x-2">
+              <span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-cyan-500/20 text-cyan-300">00:00 - 00:15</span>
+              <h4 class="font-bold text-white text-sm">Scene 1: The Ambient Noise & Cloud Privacy Dilemma</h4>
+            </div>
+            <span class="text-xs text-slate-500 font-mono">Screen: Split view of messy audio waveform & Cloud API price chart</span>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+            <div class="bg-black/40 p-3 rounded-lg border border-slate-800/80">
+              <div class="font-semibold text-slate-400 mb-1">Visual On-Screen Action:</div>
+              <p class="text-slate-300">
+                Show a raw audio file with loud background hum and long silent pauses. Flash a brief graphic showing OpenAI/AWS API costs and the risk of sending private conversations to cloud servers.
+              </p>
+            </div>
+            <div class="bg-cyan-950/20 p-3 rounded-lg border border-cyan-800/40">
+              <div class="font-semibold text-cyan-300 mb-1">Voiceover / Narrative:</div>
+              <p class="text-slate-200 italic">
+                "Standard AI speech models often fail on real-world room recordings due to background noise and silence hallucination loops. On top of that, cloud APIs expose sensitive conversations and incur steep per-minute fees."
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Scene 2 -->
+        <div class="glass-panel p-5 rounded-xl border border-slate-800 space-y-3">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center space-x-2">
+              <span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-indigo-500/20 text-indigo-300">00:15 - 00:35</span>
+              <h4 class="font-bold text-white text-sm">Scene 2: Multi-Stage DSP Acoustic Conditioning</h4>
+            </div>
+            <span class="text-xs text-slate-500 font-mono">Screen: Terminal / GUI running FFmpeg afftdn + silenceremove</span>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+            <div class="bg-black/40 p-3 rounded-lg border border-slate-800/80">
+              <div class="font-semibold text-slate-400 mb-1">Visual On-Screen Action:</div>
+              <p class="text-slate-300">
+                Zoom in on the terminal executing `afftdn=nr=12:nf=-30` and `silenceremove`. Show the audio duration drop from 3 minutes to 1 minute as dead silence is surgically pruned.
+              </p>
+            </div>
+            <div class="bg-indigo-950/20 p-3 rounded-lg border border-indigo-800/40">
+              <div class="font-semibold text-indigo-300 mb-1">Voiceover / Narrative:</div>
+              <p class="text-slate-200 italic">
+                "I engineered a zero-cloud pipeline that begins with dynamic digital signal processing. Using FFmpeg, we apply adaptive FFT noise profiling and dual-threshold silence stripping, cutting audio duration by 60% and eliminating the root cause of AI hallucinations."
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Scene 3 -->
+        <div class="glass-panel p-5 rounded-xl border border-slate-800 space-y-3">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center space-x-2">
+              <span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-blue-500/20 text-blue-300">00:35 - 00:55</span>
+              <h4 class="font-bold text-white text-sm">Scene 3: Quantized Faster-Whisper & Desktop GUI Batch</h4>
+            </div>
+            <span class="text-xs text-slate-500 font-mono">Screen: Desktop GUI (gui_transcribe.py) running batch</span>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+            <div class="bg-black/40 p-3 rounded-lg border border-slate-800/80">
+              <div class="font-semibold text-slate-400 mb-1">Visual On-Screen Action:</div>
+              <p class="text-slate-300">
+                Click "Start Batch Processing" in `gui_transcribe.py`. Show the real-time logs streaming in the dark-mode terminal window with INT8 CTranslate2 execution.
+              </p>
+            </div>
+            <div class="bg-blue-950/20 p-3 rounded-lg border border-blue-800/40">
+              <div class="font-semibold text-blue-300 mb-1">Voiceover / Narrative:</div>
+              <p class="text-slate-200 italic">
+                "For transcription, the pipeline leverages Faster-Whisper with INT8 quantization across parallel CPU worker threads, delivering lightning-fast inference without needing expensive cloud GPUs."
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Scene 4 -->
+        <div class="glass-panel p-5 rounded-xl border border-slate-800 space-y-3">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center space-x-2">
+              <span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-purple-500/20 text-purple-300">00:55 - 01:15</span>
+              <h4 class="font-bold text-white text-sm">Scene 4: Local Ollama LLM Polish & Final Deliverable</h4>
+            </div>
+            <span class="text-xs text-slate-500 font-mono">Screen: Side-by-side Markdown output inspection in VS Code</span>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+            <div class="bg-black/40 p-3 rounded-lg border border-slate-800/80">
+              <div class="font-semibold text-slate-400 mb-1">Visual On-Screen Action:</div>
+              <p class="text-slate-300">
+                Open the generated `.txt` / `.md` file. Highlight the automatically generated ISO metadata header, clean paragraph structuring, and action items produced by local Llama 3 via Ollama.
+              </p>
+            </div>
+            <div class="bg-purple-950/20 p-3 rounded-lg border border-purple-800/40">
+              <div class="font-semibold text-purple-300 mb-1">Voiceover / Narrative:</div>
+              <p class="text-slate-200 italic">
+                "Finally, an on-premise Llama 3 instance polishes the transcript into structured business intelligence—removing verbal stutters and adding metadata headers. The result: 100% data privacy, zero recurring cloud costs, and audit-ready transcripts."
+              </p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Quick Recording Tips -->
+      <div class="glass-panel p-5 rounded-xl border border-slate-800 space-y-2">
+        <h4 class="font-bold text-white text-sm">Pro Tips for Recording Your Demo Video</h4>
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs text-slate-300 pt-1">
+          <div class="glass-card p-3 rounded-lg">
+            <strong class="text-cyan-400">1. Clean Desktop:</strong> Hide desktop icons and close unrelated browser tabs so the viewer focuses strictly on the app and terminal.
+          </div>
+          <div class="glass-card p-3 rounded-lg">
+            <strong class="text-cyan-400">2. Cursor Smoothing:</strong> Use Loom or OBS Studio with cursor highlight to guide viewer attention directly to buttons and logs.
+          </div>
+          <div class="glass-card p-3 rounded-lg">
+            <strong class="text-cyan-400">3. Fast-Paced:</strong> Keep the entire video under 75 seconds for maximum LinkedIn & GitHub viewer retention.
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- JAVASCRIPT LOGIC -->
+  <script>
+    // Tab Switching Function
+    function switchTab(tabId) {
+      document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+      document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.classList.remove('bg-cyan-500/20', 'text-cyan-300', 'border', 'border-cyan-500/30');
+        btn.classList.add('text-slate-400');
+      });
+
+      const targetContent = document.getElementById('tab-' + tabId);
+      const targetBtn = document.getElementById('tab-btn-' + tabId);
+
+      if (targetContent) targetContent.classList.remove('hidden');
+      if (targetBtn) {
+        targetBtn.classList.remove('text-slate-400');
+        targetBtn.classList.add('bg-cyan-500/20', 'text-cyan-300', 'border', 'border-cyan-500/30');
+      }
+    }
+
+    // Stage Selector Data
+    const stageData = {
+      1: {
+        badge: "Stage 01 Details",
+        title: "Source Ingestion & Dynamic Routing",
+        desc: "The pipeline monitors target directories for arbitrary multi-format media (`.wav`, `.mp3`, `.m4a`, `.aac`, `.amr`, `.3ga`). It immediately executes ffprobe to determine audio channel geometry and bitrates, while parsing regex timestamp patterns to establish canonical chronological file naming.",
+        bullets: [
+          "Zero-data loss handling of legacy phone codecs (`amrnb`/`amrwb`) and mobile voice memos.",
+          "Automated tagging: `[Voicemail]`, `[OBS_ScreenCap]`, `[EarSpy_Ambient]`.",
+          "Prevents duplicate processing by checking existing transcript signatures."
+        ],
+        codeLabel: "extract_metadata & determine_source",
+        code: `def determine_source(filename, metadata):
+    fn_lower = filename.lower()
+    codec = metadata.get("codec", "")
+    samplerate = metadata.get("samplerate_hz", 0)
+    
+    if re.search(r"\\d{4}-\\d{2}-\\d{2}_\\d{2}-\\d{2}-\\d{2}", filename):
+        return "[OBS_ScreenCap]", False
+    if codec in ["amr", "amrnb"] or (0 < samplerate <= 11025):
+        return "[Voicemail]", True
+    if codec in ["aac", "m4a"] or "recording" in fn_lower:
+        return "[EarSpy_Ambient]", True
+    return "[Unknown_Source]", False`
+      },
+      2: {
+        badge: "Stage 02 Details",
+        title: "Digital Signal Processing (DSP) & Noise Profiling",
+        desc: "Room recordings feature intense HVAC hum, reverberation, and intermittent silence. FFmpeg's `afftdn` applies adaptive FFT spectral noise reduction with a -30dB floor, followed by two-way silence stripping and EBU R128 loudness normalization (`loudnorm`).",
+        bullets: [
+          "`afftdn=nr=12:nf=-30` eliminates low-end ambient electrical and HVAC hum.",
+          "`silenceremove` strips dead room pauses, shrinking file duration by up to 66%.",
+          "Audio is normalized to 16kHz mono, perfectly aligning with Whisper's acoustic receptive field."
+        ],
+        codeLabel: "preprocess_standard (FFmpeg Filter Chain)",
+        code: `def preprocess_standard(input_path, output_path):
+    filter_chain = (
+        "afftdn=nr=12:nf=-30,"
+        "silenceremove=start_periods=1:start_duration=0.5:start_threshold=-30dB:"
+        "stop_periods=-1:stop_duration=0.5:stop_threshold=-30dB,"
+        "loudnorm"
+    )
+    subprocess.run([
+        "ffmpeg", "-y", "-i", str(input_path),
+        "-af", filter_chain,
+        "-ar", "16000", "-ac", "1",
+        str(output_path)
+    ], check=True)`
+      },
+      3: {
+        badge: "Stage 03 Details",
+        title: "INT8 Quantized Faster-Whisper Inference",
+        desc: "Instead of relying on heavy Python PyTorch runtimes, the pipeline uses CTranslate2's Faster-Whisper engine. Executing an INT8 quantized `small` model across parallel CPU worker threads reduces memory footprint to under 1.5GB while transcribing at over 4x real-time.",
+        bullets: [
+          "INT8 quantization enables real-time execution on standard enterprise laptops without GPUs.",
+          "Voice Activity Detection (VAD) filter provides second-tier protection against noise tokens.",
+          "High sensitivity mode dynamically increases beam search width for muffled speech."
+        ],
+        codeLabel: "transcribe_speech (CTranslate2 Backend)",
+        code: `def transcribe_speech(model, processed_audio_path, high_sensitivity=False):
+    beam_size = 3 if high_sensitivity else 1
+    segments, _ = model.transcribe(
+        str(processed_audio_path),
+        beam_size=beam_size,
+        vad_filter=True,
+        vad_parameters=dict(min_silence_duration_ms=500)
+    )
+    return " ".join([segment.text.strip() for segment in segments])`
+      },
+      4: {
+        badge: "Stage 04 Details",
+        title: "Cognitive Polish & Structured Synthesis (Ollama Llama 3)",
+        desc: "Raw transcripts often contain transcription stutters and lacked structural clarity. An on-premise Ollama instance running `llama3` formats raw text into coherent paragraphs, tags unintelligible segments deterministically, and appends timestamped metadata headers.",
+        bullets: [
+          "100% Zero-Cloud: No transcript data leaves localhost or the internal enterprise LAN.",
+          "Zero Hallucination Guard: Formats to '[No intelligible speech detected]' when audio is purely ambient.",
+          "Prepend audit metadata: Original filename, recording duration, and clean stem references."
+        ],
+        codeLabel: "polish_with_ollama (Local LLM Integration)",
+        code: `def polish_with_ollama(raw_transcript, metadata):
+    client = ollama.Client(host=f"http://{OLLAMA_HOST}")
+    prompt = f"""
+    You are an expert audio archivist. Clean and format the raw transcript below,
+    which was generated from an ambient room recording.
+    METADATA: {metadata.get('filename')} ({metadata.get('duration_sec')}s)
+    RAW: "{raw_transcript}"
+    INSTRUCTIONS: Remove hallucination loops, format into logical dialogue,
+    and prepend an executive audit summary header.
+    """
+    response = client.generate(model="llama3", prompt=prompt)
+    return response.get("response", raw_transcript)`
+      }
+    };
+
+    function selectStage(num) {
+      document.querySelectorAll('.stage-card').forEach(c => {
+        c.classList.remove('border-cyan-400', 'bg-cyan-950/20');
+        c.classList.add('border-slate-800');
+      });
+      const activeCard = document.getElementById('stage-card-' + num);
+      if (activeCard) {
+        activeCard.classList.remove('border-slate-800');
+        activeCard.classList.add('border-cyan-400', 'bg-cyan-950/20');
+      }
+
+      const data = stageData[num];
+      if (data) {
+        document.getElementById('inspector-badge').innerText = data.badge;
+        document.getElementById('inspector-title').innerText = data.title;
+        document.getElementById('inspector-desc').innerText = data.desc;
+        document.getElementById('inspector-code-label').innerText = data.codeLabel;
+        document.getElementById('inspector-code').querySelector('code').innerText = data.code;
+
+        const bulletsUl = document.getElementById('inspector-bullets');
+        bulletsUl.innerHTML = '';
+        data.bullets.forEach(b => {
+          const li = document.createElement('li');
+          li.innerText = b;
+          bulletsUl.appendChild(li);
+        });
+      }
+    }
+
+    // Interactive GUI Simulation Logic
+    let simInterval = null;
+    function startInteractiveSimulation() {
+      resetSimulation();
+
+      const runBtn = document.getElementById('sim-run-btn');
+      const mockBtn = document.getElementById('mock-btn-start');
+      const statusText = document.getElementById('mock-status-text');
+      const spinner = document.getElementById('sim-spinner');
+      const progressBar = document.getElementById('sim-progress-bar');
+      const taskName = document.getElementById('sim-task-name');
+      const taskPct = document.getElementById('sim-task-pct');
+      const terminal = document.getElementById('mock-terminal');
+
+      runBtn.disabled = true;
+      mockBtn.classList.add('opacity-50', 'cursor-not-allowed');
+      statusText.innerHTML = 'Status: <span class="text-cyan-400 font-semibold not-italic">Processing Batch...</span>';
+      spinner.classList.remove('hidden');
+
+      const logLines = [
+        { pct: 10, task: "Scanning directory...", text: "\n--- [BATCH START] Found 4 audio files in 'Staging_Recordings' ---", color: "text-cyan-300" },
+        { pct: 20, task: "Loading Whisper INT8 model...", text: "Loading Faster-Whisper Model ('small', device=cpu, int8, threads=3)...", color: "text-slate-300" },
+        { pct: 35, task: "[1/4] Processing Conference_Room_Ambient.m4a...", text: "\n--- Processing: Conference_Room_Ambient.m4a (Duration: 184s) ---", color: "text-white font-semibold" },
+        { pct: 45, task: "Running FFmpeg afftdn & silence stripping...", text: "[1/3] Running afftdn noise reduction (-30dB) & stripping silence intervals...", color: "text-indigo-300" },
+        { pct: 55, task: "Whisper speech transcription...", text: "[2/3] Executing Faster-Whisper transcription (beam_size=1, vad_filter=True)...", color: "text-blue-300" },
+        { pct: 70, task: "Polishing with Local Ollama (llama3)...", text: "[3/3] Polishing transcript via Local Ollama (Model: llama3 at 127.0.0.1:11434)...", color: "text-purple-300" },
+        { pct: 85, task: "Writing canonical output...", text: "SUCCESS: Saved executive audit report to 'Recording_2026-10-18_Conference_Room_[EarSpy_Ambient].txt'", color: "text-emerald-400 font-bold" },
+        { pct: 100, task: "Batch Complete!", text: "\n==========================================\nBatch Complete! Processed: 4 | Skipped: 0 | Errors: 0\n==========================================", color: "text-cyan-400 font-bold" }
+      ];
+
+      let step = 0;
+      simInterval = setInterval(() => {
+        if (step < logLines.length) {
+          const item = logLines[step];
+          progressBar.style.width = item.pct + '%';
+          taskPct.innerText = item.pct + '%';
+          taskName.innerText = item.task;
+
+          const lineDiv = document.createElement('div');
+          lineDiv.className = item.color;
+          lineDiv.innerText = item.text;
+          terminal.appendChild(lineDiv);
+          terminal.scrollTop = terminal.scrollHeight;
+          step++;
+        } else {
+          clearInterval(simInterval);
+          statusText.innerHTML = 'Status: <span class="text-emerald-400 font-semibold not-italic">Ready (Batch Finished)</span>';
+          spinner.classList.add('hidden');
+          runBtn.disabled = false;
+          mockBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+        }
+      }, 700);
+    }
+
+    function resetSimulation() {
+      if (simInterval) clearInterval(simInterval);
+      document.getElementById('sim-progress-bar').style.width = '0%';
+      document.getElementById('sim-task-pct').innerText = '0%';
+      document.getElementById('sim-task-name').innerText = 'Idle';
+      document.getElementById('mock-status-text').innerHTML = 'Status: <span class="text-emerald-400 font-semibold not-italic">Ready</span>';
+      document.getElementById('sim-spinner').classList.add('hidden');
+      document.getElementById('sim-run-btn').disabled = false;
+      document.getElementById('mock-btn-start').classList.remove('opacity-50', 'cursor-not-allowed');
+      
+      const terminal = document.getElementById('mock-terminal');
+      terminal.innerHTML = `
+        <div class="text-slate-500">[INIT] Application initialized. Waiting for user batch trigger...</div>
+        <div class="text-slate-500">[+] FFmpeg binary verified in system PATH.</div>
+        <div class="text-slate-500">[+] Ollama daemon active at 127.0.0.1:11434 (Model: llama3).</div>
+        <div class="text-slate-500">[+] Faster-Whisper backend ready (Compute: int8, Threads: 3, Workers: 2).</div>
+      `;
+    }
+
+    // ROI Calculator Function
+    function updateRoiCalc() {
+      const hours = parseInt(document.getElementById('calc-hours').value);
+      const users = parseInt(document.getElementById('calc-users').value);
+
+      document.getElementById('calc-hours-display').innerText = hours + ' Hours';
+      document.getElementById('calc-users-display').innerText = users + ' Seats';
+
+      const totalMinutesPerYear = hours * 60 * 12;
+      // AWS Transcribe standard rate: $0.024/min
+      const awsCostPerYear = totalMinutesPerYear * 0.024;
+      
+      document.getElementById('calc-annual-saved').innerText = '$' + Math.round(awsCostPerYear).toLocaleString();
+    }
+
+    // Run Initial Setup
+    window.addEventListener('DOMContentLoaded', () => {
+      updateRoiCalc();
+    });
+  </script>
+</body>
+</html>

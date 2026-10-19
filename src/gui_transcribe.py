@@ -65,10 +65,67 @@ def transcribe_speech(model, processed_audio_path):
     )
     return " ".join([segment.text.strip() for segment in segments])
 
-def polish_with_ollama(raw_transcript, metadata):
+def salvage_audio_pass(path_obj, model):
+    salvage_wav = path_obj.with_suffix(".salvage.wav")
+    print("      Standard pass yielded no speech. Initiating Deep Salvage Fallback...")
+    try:
+        salvage_filter = (
+            "highpass=f=200,lowpass=f=3400,"
+            "speechnorm=e=12.5:r=0.0001:l=1,"
+            "afftdn=nr=18:nf=-45,"
+            "loudnorm"
+        )
+        cmd = [
+            "ffmpeg", "-y", "-i", str(path_obj),
+            "-af", salvage_filter,
+            "-ar", "16000", "-ac", "1",
+            str(salvage_wav)
+        ]
+        subprocess.run(cmd, stdout=subprocess.DEVNULL, stderr=subprocess.PIPE, timeout=300, check=True)
+
+        segments, _ = model.transcribe(
+            str(salvage_wav),
+            beam_size=5,
+            vad_filter=False,
+            no_speech_threshold=0.25,
+            logprob_threshold=-1.8,
+            temperature=[0.0, 0.2, 0.4],
+            initial_prompt="Muffled room conversation with low-volume speech."
+        )
+        salvaged_text = " ".join([s.text.strip() for s in segments]).strip()
+        if salvaged_text:
+            print(f"      [+] Deep Salvage recovered text: '{salvaged_text[:80]}...'")
+        return salvaged_text
+    except Exception as e:
+        print(f"      [!] Deep Salvage pass encountered error: {e}")
+        return ""
+    finally:
+        if salvage_wav.exists():
+            salvage_wav.unlink()
+
+def polish_with_ollama(raw_transcript, metadata, is_salvaged=False):
     client = ollama.Client(host='http://127.0.0.1:11434')
     
-    prompt = f"""
+    if is_salvaged:
+        prompt = f"""
+You are an expert audio archivist and forensic transcription analyst.
+The following text was recovered via a deep-salvage acoustic recovery pass from heavily degraded room audio:
+
+AUDIO METADATA:
+- File Name: {metadata.get('filename')}
+- Duration: {metadata.get('duration_sec', 'N/A')} seconds
+- Original Size: {metadata.get('filesize_mb', 'N/A')} MB
+
+RAW RECOVERED FRAGMENTS:
+"{raw_transcript}"
+
+INSTRUCTIONS:
+1. Clean grammatical stutters and reconstruct the most likely spoken sentences based on phonetic context.
+2. For uncertain or reconstructed words, wrap them in brackets like [Probable: ...].
+3. Append a brief header containing key metadata summary above the transcription and a note "[Note: Recovered via Deep Salvage Acoustic Filter]" at the bottom.
+"""
+    else:
+        prompt = f"""
 You are an expert audio archivist. Clean and format the raw transcript below, which was generated from an ambient room audio recording.
 
 AUDIO METADATA:
@@ -106,11 +163,17 @@ def process_single_file(path_obj, model):
     print("[2/3] Transcribing audio with faster-whisper...")
     raw_transcript = transcribe_speech(model, temp_cleaned_wav)
 
+    is_salvaged = False
+    if not raw_transcript.strip() and metadata.get("duration_sec", 0) > 3:
+        raw_transcript = salvage_audio_pass(path_obj, model)
+        if raw_transcript.strip():
+            is_salvaged = True
+
     print("[3/3] Polishing transcript with Ollama...")
     if not raw_transcript.strip():
         final_text = "[No intelligible speech detected in recording]"
     else:
-        final_text = polish_with_ollama(raw_transcript, metadata)
+        final_text = polish_with_ollama(raw_transcript, metadata, is_salvaged=is_salvaged)
 
     with open(output_txt, "w", encoding="utf-8") as f:
         f.write(final_text)
@@ -119,6 +182,7 @@ def process_single_file(path_obj, model):
         temp_cleaned_wav.unlink()
 
     print(f"SUCCESS: Saved output to '{output_txt.name}'")
+
 
 
 # --- TEXT REDIRECTOR CLASS FOR TKINTER ---

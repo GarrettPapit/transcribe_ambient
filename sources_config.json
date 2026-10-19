@@ -2,35 +2,46 @@
   "description": "Configurable audio recording source classification rules for Transcribe_Ambient.",
   "sources": [
     {
-      "name": "Screen Capture",
-      "tag": "[ScreenCap]",
+      "name": "Board Meeting",
+      "tag": "[BoardMeeting]",
       "high_sensitivity": false,
       "match_mode": "any",
       "conditions": {
         "filename_pattern": "\\d{4}-\\d{2}-\\d{2}_\\d{2}-\\d{2}-\\d{2}",
-        "filename_contains": ["screencap", "obs", "screen_recording"]
+        "filename_contains": ["boardmeet", "board", "exec"]
       }
     },
     {
-      "name": "Voicemail / Low-Bandwidth Call",
-      "tag": "[Voicemail]",
-      "high_sensitivity": true,
-      "match_mode": "any",
-      "conditions": {
-        "codecs": ["amr", "amrnb", "amrwb"],
-        "filename_contains": ["voicemail", "vm_"],
-        "max_samplerate_hz": 11025
-      }
-    },
-    {
-      "name": "Ambient Voice Memo",
+      "name": "Voice Memo / Low-Bandwidth Call",
       "tag": "[VoiceMemo]",
       "high_sensitivity": true,
       "match_mode": "any",
       "conditions": {
+        "codecs": ["amr", "amrnb", "amrwb"],
+        "filename_contains": ["voicememo", "memo", "voice", "vm_"],
+        "max_samplerate_hz": 11025
+      }
+    },
+    {
+      "name": "Client Consultation",
+      "tag": "[ClientConsultation]",
+      "high_sensitivity": true,
+      "match_mode": "any",
+      "conditions": {
         "codecs": ["aac", "m4a"],
-        "filename_contains": ["recording", "memo", "ambient", "mic"]
+        "filename_contains": ["client", "consult"]
+      }
+    },
+        {
+      "name": "Conference Call",
+      "tag": "[ConferenceCall]",
+      "high_sensitivity": true,
+      "match_mode": "any",
+      "conditions": {
+        "codecs": ["aac", "m4a"],
+        "filename_contains": ["conference", "call"]
       }
     }
   ]
 }
+

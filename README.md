@@ -13,7 +13,7 @@
 [![Privacy](https://img.shields.io/badge/Data%20Privacy-100%25%20Zero--Cloud-success.svg)](#-business-advantages--enterprise-roi)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-[**Explore Interactive Portfolio Showcase**](docs/portfolio_showcase.html) • [**Portfolio Asset & Video Storyboard Guide**](docs/PORTFOLIO_ASSETS_GUIDE.md)
+[**Interactive Video Mockup Player**](docs/video_mockup.html) • [**Interactive Portfolio Showcase**](docs/portfolio_showcase.html) • [**Client Architecture Whitepaper**](docs/CLIENT_ARCHITECTURE_OVERVIEW.md) • [**Portfolio Asset & Video Guide**](docs/PORTFOLIO_ASSETS_GUIDE.md)
 
 </div>
 

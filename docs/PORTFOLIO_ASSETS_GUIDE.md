@@ -2,7 +2,9 @@
 
 > **Author:** Garrett Papit  
 > **Project Repository:** [https://github.com/GarrettPapit/transcribe_ambient](https://github.com/GarrettPapit/transcribe_ambient)  
-> **Interactive Portfolio Showcase:** [`docs/portfolio_showcase.html`](./portfolio_showcase.html)
+> **Interactive Video Mockup Player:** [`docs/video_mockup.html`](./video_mockup.html)  
+> **Interactive Portfolio Showcase:** [`docs/portfolio_showcase.html`](./portfolio_showcase.html)  
+> **Client Architecture Whitepaper:** [`docs/CLIENT_ARCHITECTURE_OVERVIEW.md`](./CLIENT_ARCHITECTURE_OVERVIEW.md)  
 
 ---
 

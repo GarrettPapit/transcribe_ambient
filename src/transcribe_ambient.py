@@ -284,15 +284,73 @@ def transcribe_speech(model, processed_audio_path, high_sensitivity=False):
     segments, _ = model.transcribe(str(processed_audio_path), beam_size=beam_size, vad_filter=True)
     return " ".join([segment.text.strip() for segment in segments])
 
-def polish_with_ollama(raw_transcript, metadata):
+def salvage_audio_pass(path_obj: Path, model):
+    """Deep salvage fallback executed when standard DSP and UVR yield no intelligible speech.
+    Applies telephone formant bandpass (200Hz-3400Hz), adaptive speechnorm gain boosting,
+    and forces Whisper decoding with VAD disabled and relaxed confidence thresholds."""
+    salvage_wav = path_obj.with_suffix(".salvage.wav")
+    print("🚨 Standard passes yielded no speech. Initiating Deep Salvage Fallback...")
+
+    try:
+        # 1. Isolate speech formants & dynamically pull faint whispers up
+        salvage_filter = (
+            "highpass=f=200,lowpass=f=3400,"
+            "speechnorm=e=12.5:r=0.0001:l=1,"
+            "afftdn=nr=18:nf=-45,"
+            "loudnorm"
+        )
+        cmd = [
+            "ffmpeg", "-y", "-i", str(path_obj),
+            "-af", salvage_filter,
+            "-ar", "16000", "-ac", "1",
+            str(salvage_wav)
+        ]
+        subprocess.run(cmd, stdout=subprocess.DEVNULL, stderr=subprocess.PIPE, timeout=300, check=True)
+
+        # 2. Whisper decoding with VAD disabled, relaxed confidence thresholds, and acoustic primer
+        segments, _ = model.transcribe(
+            str(salvage_wav),
+            beam_size=5,
+            vad_filter=False,                # Bypasses VAD false-rejection of faint speech
+            no_speech_threshold=0.25,        # Bypasses silence bailout
+            logprob_threshold=-1.8,          # Allows lower-confidence acoustic phonemes
+            temperature=[0.0, 0.2, 0.4],
+            initial_prompt="Muffled room conversation with low-volume speech."
+        )
+        salvaged_text = " ".join([s.text.strip() for s in segments]).strip()
+        if salvaged_text:
+            print(f"   [+] Deep Salvage recovered text: '{salvaged_text[:80]}...'")
+        return salvaged_text
+    except Exception as e:
+        print(f"   [!] Deep Salvage pass encountered error: {e}")
+        return ""
+    finally:
+        if salvage_wav.exists():
+            salvage_wav.unlink()
+
+def polish_with_ollama(raw_transcript, metadata, is_salvaged=False):
     try:
         client = ollama.Client(host=f"http://{OLLAMA_HOST}")
-        prompt = f"""
-        Clean and format the raw transcript from an ambient room recording.
-        Metadata: {metadata.get('filename')} ({metadata.get('duration_sec')}s)
-        Raw: "{raw_transcript}"
-        Instructions: Format into logical paragraphs. If empty, output "[No intelligible speech detected]". No preambles.
-        """
+        if is_salvaged:
+            prompt = f"""
+            You are an expert audio archivist and forensic transcription analyst.
+            The following text was recovered via a deep-salvage acoustic recovery pass from heavily degraded room audio:
+            Metadata: {metadata.get('filename')} ({metadata.get('duration_sec')}s)
+            Raw Recovered Fragments: "{raw_transcript}"
+
+            Instructions:
+            1. Clean grammatical stutters and reconstruct the most likely spoken sentences based on phonetic context.
+            2. For uncertain or reconstructed words, wrap them in brackets like [Probable: ...].
+            3. Append a note: "[Note: Recovered via Deep Salvage Acoustic Filter]" at the bottom.
+            No conversational pleasantries or preambles.
+            """
+        else:
+            prompt = f"""
+            Clean and format the raw transcript from an ambient room recording.
+            Metadata: {metadata.get('filename')} ({metadata.get('duration_sec')}s)
+            Raw: "{raw_transcript}"
+            Instructions: Format into logical paragraphs. If empty, output "[No intelligible speech detected]". No preambles.
+            """
         response = client.generate(model=os.getenv("OLLAMA_MODEL", "llama3"), prompt=prompt)
         return response.get("response", raw_transcript)
     except Exception as e:
@@ -315,6 +373,7 @@ def process_single_file(path_obj, model, high_sensitivity=False, enable_resolve=
         raw_transcript = transcribe_speech(model, temp_cleaned_wav, high_sensitivity=use_hs)
 
         # Fallback Passes
+        is_salvaged = False
         if not raw_transcript.strip() and metadata.get("duration_sec", 0) > 5 and enable_uvr:
             try:
                 print("⚠️ Primary pass empty. Attempting UVR fallback...")
@@ -323,8 +382,14 @@ def process_single_file(path_obj, model, high_sensitivity=False, enable_resolve=
             except Exception as uvr_err:
                 print(f"UVR Fallback skipped: {uvr_err}")
 
+        # Deep Salvage Pass (if primary and UVR both yielded no speech)
+        if not raw_transcript.strip() and metadata.get("duration_sec", 0) > 3:
+            raw_transcript = salvage_audio_pass(path_obj, model)
+            if raw_transcript.strip():
+                is_salvaged = True
+
         print("[3/3] Polishing via Local LLM...")
-        final_text = "[No intelligible speech detected in recording]" if not raw_transcript.strip() else polish_with_ollama(raw_transcript, metadata)
+        final_text = "[No intelligible speech detected in recording]" if not raw_transcript.strip() else polish_with_ollama(raw_transcript, metadata, is_salvaged=is_salvaged)
 
         new_audio_path, new_txt_path = rename_file_pair(path_obj, metadata, source_tag)
         with open(new_txt_path, "w", encoding="utf-8") as f:

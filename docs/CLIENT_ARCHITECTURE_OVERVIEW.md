@@ -124,3 +124,4 @@ The final stage routes transcripts to a locally hosted LLM instance (Ollama runn
 * **Memory Footprint:** $\approx 1.2\text{ GB} - 1.8\text{ GB}$ RAM (Runs comfortably on standard laptops and thin clients)
 * **Average Latency:** $0.22\times$ real-time on Intel Core i7 / AMD Ryzen (e.g., a 10-minute meeting processes in $\approx 2.2$ minutes)
 * **DSP Overhead:** Less than $0.8\text{ seconds}$ per audio minute for full FFmpeg filtering
+
